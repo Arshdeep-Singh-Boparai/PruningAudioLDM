@@ -30,8 +30,10 @@ Please use  this [Link](https://github.com/haoheliu/AudioLDM-training-finetuning
 Thanks to Haohe Liu for great efforts on AudioLDM github repository. 
 
 
-### Compute sorted indexes from a pre-trained U-Net model across convolutional layers
+### 1. Generate Layer-wise Sorted Channel Indexes
+This step computes channel importance rankings for convolutional layers in the pretrained U-Net.
 
+The generated index dictionary is used during pruning.
 
 ```
 
@@ -40,9 +42,19 @@ python layerwise_sorted_index_generation.py \
     --output pruned_indexes/B3_B4/sorted_indexes_dict.pkl  
 ```  
 
+| Argument   | Description                                     |
+| ---------- | ----------------------------------------------- |
+| `--ckpt`   | Path to pretrained AudioLDM U-Net checkpoint    |
+| `--output` | Output path for sorted channel index dictionary |
 
-### Obtain a pruned network with pre-defined channel scaling parameters, and save the pruned U-net parameters 
+### 2. Generate Pruned U-Net Checkpoint
 
+This step creates a compact U-Net by applying structured channel pruning.
+
+The pruning ratio is controlled using block-wise channel scaling factors:
+
+p: Block-4 channel scaling factor
+dp: Block-3 channel scaling factor
 ```
 python pruned_unet_dict_creation.py \
     --ckpt checkpoints/Unet_model-m.ckpt \
@@ -53,20 +65,21 @@ python pruned_unet_dict_creation.py \
 
 ```
 
-#### Arguments
-
-- `--ckpt` : pre-trained U-Net checkpoint path
-- `--idx-dict` : pruning index dictionary
-- `--output` : U-Net pruned checkpoint  
-- `--p` : block-4 channel multiplier
-- `--dp` : block-3 channel multiplier
-
-
-
-### AudioLDM Checkpoint Merger
+| Argument     | Description                             |
+| ------------ | --------------------------------------- |
+| `--ckpt`     | Pre-trained U-Net checkpoint path       |
+| `--idx-dict` | Layer-wise pruning index dictionary     |
+| `--output`   | Output path for pruned U-Net checkpoint |
+| `--p`        | Block-4 channel multiplier              |
+| `--dp`       | Block-3 channel multiplier              |
 
 
-Merge pruned UNet weights into a full AudioLDM checkpoint.
+### 3. AudioLDM Checkpoint Merger
+
+The generated pruned U-Net checkpoint contains only the modified diffusion model parameters.
+
+This step merges the pruned U-Net weights into the complete AudioLDM checkpoint while keeping other model components unchanged.
+
 
 ```
 python merge_pruned_checkpoint.py \
@@ -74,13 +87,12 @@ python merge_pruned_checkpoint.py \
     --full-ckpt checkpoints/original/audioldm-m-full.ckpt \
     --output checkpoints/l1_audioldm-m-full_p2_dp2.ckpt
 ```
-#### Arguments
-
-- `--pruned-ckpt` : Pruned UNet weights (.pt)
-- `--full-ckpt` : Original AudioLDM checkpoint (.ckpt)
-- `--output` : Output checkpoint path
-- `--prefix` : Key prefix (default: `model.diffusion_model.`)
-
+| Argument        | Description                                                    |
+| --------------- | -------------------------------------------------------------- |
+| `--pruned-ckpt` | Path to pruned U-Net weights (`.pt`)                           |
+| `--full-ckpt`   | Original AudioLDM checkpoint (`.ckpt`)                         |
+| `--output`      | Output merged AudioLDM checkpoint                              |
+| `--prefix`      | U-Net parameter key prefix (default: `model.diffusion_model.`) |
 
 
 
