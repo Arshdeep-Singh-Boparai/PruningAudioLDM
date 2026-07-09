@@ -109,15 +109,14 @@ python merge_pruned_checkpoint.py \
 
 
 
-### 4. Finetuning pruned AudioLDM-M-FUll
+### 4. Finetuning pruned AudioLDM-M-Full
 
 Finetuning of the pruned model follows exactly same setup as shared in [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning). 
-There is only need to Update following:
-"audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml" to match channel scaling parameter with that of the pruned model architecture.
-
-'''
-# Medium size AudioLDM
-python3 audioldm_train/train/latent_diffusion.py -c audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml --reload_from_ckpt data/checkpoints/l1_unet_pruned_p2_dp2.ckpt
+It requires an update in the confoguration file: "audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml":
+        
+        channel_mult [1,2,3,5]--> [1,2,dp,p] and useage of the pruned model checkpoint with [1,2,dp,p] configuration.
+  ''''      
+python3 audioldm_train/train/latent_diffusion.py -c audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml --reload_from_ckpt data/checkpoints/{pruned model checkpoint}.ckpt
 
 '''
 
