@@ -1,8 +1,11 @@
 
 
-# Efficient AudioLDM via Structured  U-Net Pruning
+# Efficient Text-to-Audio generative model viaPruning
 
-This repository presents a **structured pruning framework for compressing the AudioLDM-M-Full text-to-audio generative model**. The proposed approach reduces the computational complexity and memory footprint of the diffusion U-Net by removing redundant convolutional filters while preserving audio generation quality.
+This repository presents a **structured pruning framework for compressing the AudioLDM-M-Full text-to-audio generative (TTA) model**. The proposed approach reduces the computational complexity and memory footprint of the diffusion U-Net by removing redundant convolutional filters while preserving audio generation quality.
+
+
+The TTA model is evaluated on AudioCaps test dataset using FAD and KL divergence metrics.
 
 The pruning pipeline consists of three main stages:
 
@@ -16,7 +19,7 @@ The pruning pipeline consists of three main stages:
    Merge the pruned U-Net weights into the full AudioLDM checkpoint for inference or further finetuning.
    
 4. **Finetuning the pruned AudioLDM** 
-   Finetune the pruned AudioLDM-M-Full using similar training setup as used by [original AudioLDM](https://github.com/haoheliu/AudioLDM-training-finetuning).
+   Finetune the pruned AudioLDM-M-Full using similar training setup as used by [original AudioLDM](https://github.com/haoheliu/AudioLDM-training-finetuning), except the dataset which is AudioCaps training dataset.
    
 5. **Semantic Quality Analysis** 
     Using PANNs, we obtain top-10 sound events predicted given the generated sounds. Then, we analyse capture rate or recall to analyse what sound events are getting affected by Pruning and how does finetuning helps to recover missed sound events.
