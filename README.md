@@ -1,6 +1,6 @@
 ## Usage
 
-# Compute sorted indexes from a pre-trained U-Net model across convolutional layers
+## Compute sorted indexes from a pre-trained U-Net model across convolutional layers
 
 
 ```
@@ -12,7 +12,7 @@ python layerwise_sorted_index_generation.py \
 ```  
 
 
-# Obtain a pruned network with pre-defined channel scaling parameters (b3(dp),b4(p)), and save the pruned U-net parameters 
+## Obtain a pruned network with pre-defined channel scaling parameters, and save the pruned U-net parameters 
 
 ```
 bash
@@ -25,7 +25,7 @@ python pruned_unet_dict_creation.py \
 
 ```
 
-### Arguments
+#### Arguments
 
 - `--ckpt` : pre-trained UNet checkpoint path
 - `--idx-dict` : pruning index dictionary
@@ -35,18 +35,18 @@ python pruned_unet_dict_creation.py \
 
 
 
-# AudioLDM Checkpoint Merger
+### AudioLDM Checkpoint Merger
+
 
 Merge pruned UNet weights into a full AudioLDM checkpoint.
 
-## Usage
 ```
 python merge_pruned_checkpoint.py \
     --pruned-ckpt checkpoints/pruned/l1_unet_pruned_p2_dp2.pt \
     --full-ckpt checkpoints/original/audioldm-m-full.ckpt \
     --output checkpoints/l1_audioldm-m-full_p2_dp2.ckpt
 ```
-### Arguments
+#### Arguments
 
 - `--pruned-ckpt` : Pruned UNet weights (.pt)
 - `--full-ckpt` : Original AudioLDM checkpoint (.ckpt)
