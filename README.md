@@ -2,18 +2,18 @@
 
 # Efficient AudioLDM via Structured  U-Net Pruning
 
-This repository presents a **structured pruning framework for compressing the AudioLDM-M-Full text-to-audio generative model**. The proposed approach reduces the computational complexity and memory footprint of the diffusion U-Net by removing redundant convolutional channels while preserving audio generation quality.
+This repository presents a **structured pruning framework for compressing the AudioLDM-M-Full text-to-audio generative model**. The proposed approach reduces the computational complexity and memory footprint of the diffusion U-Net by removing redundant convolutional filters while preserving audio generation quality.
 
 The pruning pipeline consists of three main stages:
 
-1. **Channel Importance Estimation**  
+1. **Filter Importance Estimation**  
    Compute layer-wise channel importance rankings from a pretrained AudioLDM U-Net.
 
 2. **Structured U-Net Pruning**  
    Generate compact U-Net architectures using predefined block-wise channel scaling factors.
 
 3. **AudioLDM Checkpoint Reconstruction**  
-   Merge the pruned U-Net weights into the full AudioLDM checkpoint for inference or further fine-tuning.
+   Merge the pruned U-Net weights into the full AudioLDM checkpoint for inference or further finetuning.
 
 This repository provides scripts for generating pruning indexes, creating pruned U-Net checkpoints, and reconstructing efficient AudioLDM models.
 
