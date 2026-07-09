@@ -1,10 +1,19 @@
 ## Usage
 
-## Compute sorted indexes from a pre-trained U-Net model across convolutional layers
+
+The repository presents a pruning framework to compress a pre-trained text-to-audio generative model, AudioLDM-M-Full.
+
+
+### Installation and AudioLDM training/finetuning framework
+
+Please use  this [Link][https://github.com/haoheliu/AudioLDM-training-finetuning]  which does "AudioLDM training, finetuning, inference and evaluation" repository to setup environment, finetuning code.
+Thanks to Haohe Liu for great efforts on AudioLDM github repository. 
+
+
+### Compute sorted indexes from a pre-trained U-Net model across convolutional layers
 
 
 ```
-bash
 
 python layerwise_sorted_index_generation.py \
     --ckpt checkpoints/Unet_model-m.ckpt \
@@ -12,10 +21,9 @@ python layerwise_sorted_index_generation.py \
 ```  
 
 
-## Obtain a pruned network with pre-defined channel scaling parameters, and save the pruned U-net parameters 
+### Obtain a pruned network with pre-defined channel scaling parameters, and save the pruned U-net parameters 
 
 ```
-bash
 python pruned_unet_dict_creation.py \
     --ckpt checkpoints/Unet_model-m.ckpt \
     --idx-dict pruned_indexes/B3_B4/sorted_indexes_dict.pkl \
