@@ -6,19 +6,24 @@ This repository presents a **structured pruning framework for compressing the Au
 
 The pruning pipeline consists of three main stages:
 
-1. **Filter Importance Estimation**  
+1. **Filter Importance Estimation** 
    Compute layer-wise channel importance rankings from a pretrained AudioLDM U-Net.
 
-2. **Structured U-Net Pruning**  
+2. **Structured U-Net Pruning** 
    Generate compact U-Net architectures using predefined block-wise channel scaling factors.
 
-3. **AudioLDM Checkpoint Reconstruction**  
+3. **AudioLDM Checkpoint Reconstruction** 
    Merge the pruned U-Net weights into the full AudioLDM checkpoint for inference or further finetuning.
+   
+4. **Finetuning the pruned AudioLDM** 
+   Finetune the pruned AudioLDM-M-Full using similar training setup as used by [original AudioLDM](https://github.com/haoheliu/AudioLDM-training-finetuning).
+   
+5. **Semantic Quality Analysis** 
+    Using PANNs, we obtain top-10 sound events predicted given the generated sounds. Then, we analyse capture rate or recall to analyse what sound events are getting affected by Pruning and how does finetuning helps to recover missed sound events.
 
 This repository provides scripts for generating pruning indexes, creating pruned U-Net checkpoints, and reconstructing efficient AudioLDM models.
 
-The implementation is built on the official **AudioLDM training, fine-tuning, inference, and evaluation framework**:
-[AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning)
+
 
 
 
@@ -26,9 +31,14 @@ The implementation is built on the official **AudioLDM training, fine-tuning, in
 
 ### Installation and AudioLDM training/finetuning framework
 
-Please use  this [Link](https://github.com/haoheliu/AudioLDM-training-finetuning)  which does "AudioLDM training, finetuning, inference and evaluation" repository to setup environment, finetuning code.
-Thanks to Haohe Liu for great efforts on AudioLDM github repository. 
+The implementation is built on the official **AudioLDM training, fine-tuning, inference, and evaluation framework**:
+[AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning)
 
+Please use  this to setup environment, finetuning code. Thanks to Haohe Liu for great efforts on AudioLDM github repository. 
+
+
+### Download checkpoints 
+ Please dowloand the pre-trained AudioLDM-M-Full and U-Net model checkpoints from [zenodo link](https://github.com/haoheliu/AudioLDM-training-finetuning).
 
 ### 1. Generate Layer-wise Sorted Channel Indexes
 This step computes channel importance rankings for convolutional layers in the pretrained U-Net.
@@ -96,6 +106,6 @@ python merge_pruned_checkpoint.py \
 
 
 
-
+### 4. Finetuning pruned AudioLDM-M-FUll
 
 
