@@ -6,7 +6,7 @@ The repository presents a pruning framework to compress a pre-trained text-to-au
 
 ### Installation and AudioLDM training/finetuning framework
 
-Please use  this [Link][https://github.com/haoheliu/AudioLDM-training-finetuning]  which does "AudioLDM training, finetuning, inference and evaluation" repository to setup environment, finetuning code.
+Please use  this [Link](https://github.com/haoheliu/AudioLDM-training-finetuning)  which does "AudioLDM training, finetuning, inference and evaluation" repository to setup environment, finetuning code.
 Thanks to Haohe Liu for great efforts on AudioLDM github repository. 
 
 
