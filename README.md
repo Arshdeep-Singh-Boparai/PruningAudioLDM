@@ -1,6 +1,6 @@
 
 
-# Efficient Text-to-Audio generative model viaPruning
+# Efficient Text-to-Audio generative model via Pruning
 
 This repository presents a **structured pruning framework for compressing the AudioLDM-M-Full text-to-audio generative (TTA) model**. The proposed approach reduces the computational complexity and memory footprint of the diffusion U-Net by removing redundant convolutional filters while preserving audio generation quality.
 
@@ -9,19 +9,19 @@ The TTA model is evaluated on AudioCaps test dataset using FAD and KL divergence
 
 The pruning pipeline consists of three main stages:
 
-1. **Filter Importance Estimation** 
+1. **Filter Importance Estimation:** 
    Compute layer-wise channel importance rankings from a pretrained AudioLDM U-Net.
 
-2. **Structured U-Net Pruning** 
+2. **Structured U-Net Pruning:** 
    Generate compact U-Net architectures using predefined block-wise channel scaling factors.
 
-3. **AudioLDM Checkpoint Reconstruction** 
+3. **AudioLDM Checkpoint Reconstruction:** 
    Merge the pruned U-Net weights into the full AudioLDM checkpoint for inference or further finetuning.
    
-4. **Finetuning the pruned AudioLDM** 
+4. **Finetuning the pruned AudioLDM:** 
    Finetune the pruned AudioLDM-M-Full using similar training setup as used by [original AudioLDM](https://github.com/haoheliu/AudioLDM-training-finetuning), except the dataset which is AudioCaps training dataset.
    
-5. **Semantic Quality Analysis** 
+5. **Semantic Quality Analysis:** 
     Using PANNs, we obtain top-10 sound events predicted given the generated sounds. Then, we analyse capture rate or recall to analyse what sound events are getting affected by Pruning and how does finetuning helps to recover missed sound events.
 
 This repository provides scripts for generating pruning indexes, creating pruned U-Net checkpoints, and reconstructing efficient AudioLDM models.
@@ -66,8 +66,8 @@ This step creates a compact U-Net by applying structured channel pruning.
 
 The pruning ratio is controlled using block-wise channel scaling factors:
 
-p: Block-4 channel scaling factor
-dp: Block-3 channel scaling factor
+p: Block-4 channel scaling factor (here, e.g. p=2)
+dp: Block-3 channel scaling factor (here, e.g. dp=2)
 ```
 python pruned_unet_dict_creation.py \
     --ckpt checkpoints/Unet_model-m.ckpt \
@@ -111,4 +111,14 @@ python merge_pruned_checkpoint.py \
 
 ### 4. Finetuning pruned AudioLDM-M-FUll
 
+Finetuning of the pruned model follows exactly same setup as shared in [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning). 
+There is only need to Update following:
+"audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml" to match channel scaling parameter with that of the pruned model architecture.
 
+'''
+# Medium size AudioLDM
+python3 audioldm_train/train/latent_diffusion.py -c audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml --reload_from_ckpt data/checkpoints/l1_unet_pruned_p2_dp2.ckpt
+
+'''
+
+Please follow [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning) for evaluation of the model output.
