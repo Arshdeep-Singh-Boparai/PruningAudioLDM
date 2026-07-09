@@ -1,7 +1,27 @@
-## Usage
 
 
-The repository presents a pruning framework to compress a pre-trained text-to-audio generative model, AudioLDM-M-Full.
+# Efficient AudioLDM via Structured  U-Net Pruning
+
+This repository presents a **structured pruning framework for compressing the AudioLDM-M-Full text-to-audio generative model**. The proposed approach reduces the computational complexity and memory footprint of the diffusion U-Net by removing redundant convolutional channels while preserving audio generation quality.
+
+The pruning pipeline consists of three main stages:
+
+1. **Channel Importance Estimation**  
+   Compute layer-wise channel importance rankings from a pretrained AudioLDM U-Net.
+
+2. **Structured U-Net Pruning**  
+   Generate compact U-Net architectures using predefined block-wise channel scaling factors.
+
+3. **AudioLDM Checkpoint Reconstruction**  
+   Merge the pruned U-Net weights into the full AudioLDM checkpoint for inference or further fine-tuning.
+
+This repository provides scripts for generating pruning indexes, creating pruned U-Net checkpoints, and reconstructing efficient AudioLDM models.
+
+The implementation is built on the official **AudioLDM training, fine-tuning, inference, and evaluation framework**:
+[AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning)
+
+
+
 
 
 ### Installation and AudioLDM training/finetuning framework
@@ -35,7 +55,7 @@ python pruned_unet_dict_creation.py \
 
 #### Arguments
 
-- `--ckpt` : pre-trained UNet checkpoint path
+- `--ckpt` : pre-trained U-Net checkpoint path
 - `--idx-dict` : pruning index dictionary
 - `--output` : U-Net pruned checkpoint  
 - `--p` : block-4 channel multiplier
