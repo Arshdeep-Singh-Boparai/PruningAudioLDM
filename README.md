@@ -113,11 +113,10 @@ python merge_pruned_checkpoint.py \
 
 Finetuning of the pruned model follows exactly same setup as shared in [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning). 
 It requires an update in the confoguration file: "audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml":
-
-```      
+     
         channel_mult [1,2,3,5]--> [1,2,dp,p] and useage of the pruned model checkpoint with [1,2,dp,p] configuration.
         
-```  
+ 
   
 ```  
 python3 audioldm_train/train/latent_diffusion.py -c audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml --reload_from_ckpt data/checkpoints/{pruned model checkpoint}.ckpt
@@ -132,7 +131,16 @@ Please follow [AudioLDM Training & Fine-tuning Repository](https://github.com/ha
 This section will be updated soon. To listen generated audios, please visit [project page](https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/).
 
 
+## Cite this work
+
+if you find this work interesting and useful, please cite it as:
+
+```
+To be updated soon.
+```
+
 ### Acknowledgment
+We greatly appreciate the open-soucre code base of the Haohe Liu's [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning). 
 
 This work was supported by the Engineering and Physical Sciences Research Council (EPSRC)  [grant number EP/Y028805/1].  For the purpose of open access, the authors have applied a Creative Commons Attribution (CC BY) licence to any Author Accepted Manuscript version arising
 
