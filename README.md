@@ -1,9 +1,8 @@
-# Efficient Text-to-Audio Generative Model via Structured Pruning
+# Efficient Text-to-Audio Generation via  Pruning
 
-> **Official implementation** of our structured pruning framework for compressing the **AudioLDM-M-Full** text-to-audio (TTA) generative model.
+> **Official implementation** of our pruning framework for compressing the **AudioLDM-M-Full** text-to-audio (TTA) generative model.
 
 [![Project Page](https://img.shields.io/badge/🌐-Project_Page-blue)](https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/)
-[![Paper](https://img.shields.io/badge/📄-Paper-coming--soon-red)](#)
 [![arXiv](https://img.shields.io/badge/arXiv-coming--soon-b31b1b.svg)](#)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -11,7 +10,6 @@
 
 ## 📚 Table of Contents
 
-- [🔗 Project Resources](#-project-resources)
 - [Overview](#overview)
 - [Pipeline](#pipeline)
 - [Installation and AudioLDM Framework](#installation-and-audioldm-framework)
@@ -26,21 +24,10 @@
 
 ---
 
-## 🔗 Project Resources
-
-| Resource | Link |
-|----------|------|
-| 🌐 **Project Page** | https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/ |
-| 📄 **Paper** | Coming Soon |
-| 📄 **arXiv** | Coming Soon |
-| 🤗 **Model Checkpoints** | Zenodo (Coming Soon) |
-| 💻 **AudioLDM Training Repository** | https://github.com/haoheliu/AudioLDM-training-finetuning |
-
----
 
 ## Overview
 
-This repository presents a **structured pruning framework** for compressing the **AudioLDM-M-Full** text-to-audio (TTA) generative model.
+This repository presents a **pruning framework** for compressing the **AudioLDM-M-Full** text-to-audio (TTA) generative model.
 
 Our approach reduces the computational complexity, memory footprint, and inference cost of the diffusion U-Net by removing redundant convolutional filters while maintaining high audio generation quality.
 
@@ -195,7 +182,7 @@ with
 channel_mult: [1,2,dp,p]
 ```
 
-where `dp` and `p` correspond to the pruning configuration.
+where `dp` (b3) and `p` (b4) correspond to channel scaling parameter for the third and fourth block of U-Net.
 
 Then launch finetuning:
 
@@ -220,7 +207,7 @@ For every generated audio clip, we obtain the **Top-10 predicted sound events** 
 - Recovery after finetuning
 - Category-wise semantic preservation
 
-Audio samples, spectrogram comparisons, and qualitative results are available on the project website.
+Audio samples and results are available on the project website.
 
 🌐 **Project Page**
 
