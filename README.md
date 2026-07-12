@@ -132,3 +132,8 @@ Please follow [AudioLDM Training & Fine-tuning Repository](https://github.com/ha
 This section will be updated soon. To listen generated audios, please visit [project page](https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/).
 
 
+### Acknowledgment
+
+This work was supported by the Engineering and Physical Sciences Research Council (EPSRC)  [grant number EP/Y028805/1].  For the purpose of open access, the authors have applied a Creative Commons Attribution (CC BY) licence to any Author Accepted Manuscript version arising
+
+
