@@ -1,147 +1,249 @@
+# Efficient Text-to-Audio Generative Model via Structured Pruning
 
+> **Official implementation** of our structured pruning framework for compressing the **AudioLDM-M-Full** text-to-audio (TTA) generative model.
 
-# Efficient Text-to-Audio generative model via Pruning
+[![Project Page](https://img.shields.io/badge/🌐-Project_Page-blue)](https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/)
+[![Paper](https://img.shields.io/badge/📄-Paper-coming--soon-red)](#)
+[![arXiv](https://img.shields.io/badge/arXiv-coming--soon-b31b1b.svg)](#)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-This repository presents a **structured pruning framework for compressing the AudioLDM-M-Full text-to-audio generative (TTA) model**. The proposed approach reduces the computational complexity and memory footprint of the diffusion U-Net by removing redundant convolutional filters while preserving audio generation quality.
+---
 
+## 📚 Table of Contents
 
-The TTA model is evaluated on AudioCaps test dataset using FAD and KL divergence metrics.
+- [🔗 Project Resources](#-project-resources)
+- [Overview](#overview)
+- [Pipeline](#pipeline)
+- [Installation and AudioLDM Framework](#installation-and-audioldm-framework)
+- [Download Checkpoints](#download-checkpoints)
+- [1. Generate Layer-wise Sorted Channel Indexes](#1-generate-layer-wise-sorted-channel-indexes)
+- [2. Generate Pruned U-Net Checkpoint](#2-generate-pruned-u-net-checkpoint)
+- [3. Merge the Pruned Checkpoint](#3-merge-the-pruned-checkpoint)
+- [4. Finetuning the Pruned AudioLDM-M-Full](#4-finetuning-the-pruned-audioldm-m-full)
+- [5. Semantic Quality Analysis](#5-semantic-quality-analysis)
+- [Citation](#citation)
+- [Acknowledgment](#acknowledgment)
 
-The pruning pipeline consists of three main stages:
+---
 
-1. **Filter Importance Estimation:** 
-   Compute layer-wise channel importance rankings from a pretrained AudioLDM U-Net.
+## 🔗 Project Resources
 
-2. **Structured U-Net Pruning:** 
-   Generate compact U-Net architectures using predefined block-wise channel scaling factors.
+| Resource | Link |
+|----------|------|
+| 🌐 **Project Page** | https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/ |
+| 📄 **Paper** | Coming Soon |
+| 📄 **arXiv** | Coming Soon |
+| 🤗 **Model Checkpoints** | Zenodo (Coming Soon) |
+| 💻 **AudioLDM Training Repository** | https://github.com/haoheliu/AudioLDM-training-finetuning |
 
-3. **AudioLDM Checkpoint Reconstruction:** 
-   Merge the pruned U-Net weights into the full AudioLDM checkpoint for inference or further finetuning.
-   
-4. **Finetuning the pruned AudioLDM:** 
-   Finetune the pruned AudioLDM-M-Full using similar training setup as used by [original AudioLDM](https://github.com/haoheliu/AudioLDM-training-finetuning), except the dataset which is AudioCaps training dataset.
-   
-5. **Semantic Quality Analysis:** 
-    Using PANNs, we obtain top-10 sound events predicted given the generated sounds. Then, we analyse capture rate or recall to analyse what sound events are getting affected by Pruning and how does finetuning helps to recover missed sound events.
+---
 
-This repository provides scripts for generating pruning indexes, creating pruned U-Net checkpoints, and reconstructing efficient AudioLDM models.
+## Overview
 
+This repository presents a **structured pruning framework** for compressing the **AudioLDM-M-Full** text-to-audio (TTA) generative model.
 
+Our approach reduces the computational complexity, memory footprint, and inference cost of the diffusion U-Net by removing redundant convolutional filters while maintaining high audio generation quality.
 
+The compressed models are evaluated on the **AudioCaps** test dataset using:
 
+- **Frechet Audio Distance (FAD)**
+- **KL Divergence (KL)**
 
+---
 
+## Pipeline
 
-### Installation and AudioLDM training/finetuning framework
+The proposed framework consists of five stages:
 
-The implementation is built on the official **AudioLDM training, fine-tuning, inference, and evaluation framework**:
-[AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning)
+1. **Filter Importance Estimation**
+   - Compute layer-wise channel importance rankings from a pretrained AudioLDM U-Net.
 
-Please use  this to setup environment, finetuning code. Thanks to Haohe Liu for great efforts on AudioLDM github repository. 
+2. **Structured U-Net Pruning**
+   - Generate compact U-Net architectures using block-wise channel scaling factors.
 
+3. **Checkpoint Reconstruction**
+   - Merge the pruned U-Net weights into the original AudioLDM checkpoint for inference or further finetuning.
 
-### Download checkpoints 
- Please dowloand the pre-trained AudioLDM-M-Full and U-Net model checkpoints from [zenodo link to be updated soon]().
+4. **Finetuning**
+   - Finetune the pruned AudioLDM-M-Full model using the AudioCaps training dataset.
 
-### 1. Generate Layer-wise Sorted Channel Indexes
-This step computes channel importance rankings for convolutional layers in the pretrained U-Net.
+5. **Semantic Quality Analysis**
+   - Evaluate semantic preservation using PANNs by analysing the Top-10 predicted sound events before and after pruning and finetuning.
 
-The generated index dictionary is used during pruning.
+---
 
-```
+## Installation and AudioLDM Framework
 
+This implementation is built upon the official **AudioLDM training, fine-tuning, inference, and evaluation framework**.
+
+Please follow the official repository to install dependencies, prepare datasets, and configure the training environment.
+
+**Official Repository**
+
+https://github.com/haoheliu/AudioLDM-training-finetuning
+
+Many thanks to **Haohe Liu** for making the AudioLDM framework publicly available.
+
+---
+
+## Download Checkpoints
+
+Please download the pretrained checkpoints before running the pruning pipeline.
+
+| Checkpoint | Status |
+|------------|--------|
+| AudioLDM-M-Full | Coming Soon (Zenodo) |
+| Pretrained U-Net | Coming Soon (Zenodo) |
+| Pruned Models | Coming Soon (Zenodo) |
+
+---
+
+# 1. Generate Layer-wise Sorted Channel Indexes
+
+Compute channel importance rankings for every convolutional layer in the pretrained U-Net.
+
+The generated index dictionary is used during structured pruning.
+
+```bash
 python layerwise_sorted_index_generation.py \
     --ckpt checkpoints/Unet_model-m.ckpt \
-    --output pruned_indexes/B3_B4/sorted_indexes_dict.pkl  
-```  
-
-| Argument   | Description                                     |
-| ---------- | ----------------------------------------------- |
-| `--ckpt`   | Path to pretrained AudioLDM U-Net checkpoint    |
-| `--output` | Output path for sorted channel index dictionary |
-
-### 2. Generate Pruned U-Net Checkpoint
-
-This step creates a compact U-Net by applying structured channel pruning.
-
-The pruning ratio is controlled using block-wise channel scaling factors:
-
-p: Block-4 channel scaling factor (here, e.g. p=2)
-dp: Block-3 channel scaling factor (here, e.g. dp=2)
+    --output pruned_indexes/B3_B4/sorted_indexes_dict.pkl
 ```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `--ckpt` | Path to the pretrained AudioLDM U-Net checkpoint |
+| `--output` | Output path for the sorted channel index dictionary |
+
+---
+
+# 2. Generate Pruned U-Net Checkpoint
+
+Generate a compact U-Net using structured channel pruning.
+
+The pruning configuration is controlled by two block-wise scaling factors:
+
+- **p** → Block-4 channel scaling factor
+- **dp** → Block-3 channel scaling factor
+
+```bash
 python pruned_unet_dict_creation.py \
     --ckpt checkpoints/Unet_model-m.ckpt \
     --idx-dict pruned_indexes/B3_B4/sorted_indexes_dict.pkl \
     --output checkpoints/pruned/l1_unet_pruned_p2_dp2.pt \
     --p 2 \
-    --dp 2# 
-
+    --dp 2
 ```
 
-| Argument     | Description                             |
-| ------------ | --------------------------------------- |
-| `--ckpt`     | Pre-trained U-Net checkpoint path       |
-| `--idx-dict` | Layer-wise pruning index dictionary     |
-| `--output`   | Output path for pruned U-Net checkpoint |
-| `--p`        | Block-4 channel multiplier              |
-| `--dp`       | Block-3 channel multiplier              |
+### Arguments
 
+| Argument | Description |
+|----------|-------------|
+| `--ckpt` | Pretrained U-Net checkpoint |
+| `--idx-dict` | Layer-wise pruning index dictionary |
+| `--output` | Output pruned checkpoint |
+| `--p` | Block-4 scaling factor |
+| `--dp` | Block-3 scaling factor |
 
-### 3. AudioLDM Checkpoint Merger
+---
 
-The generated pruned U-Net checkpoint contains only the modified diffusion model parameters.
+# 3. Merge the Pruned Checkpoint
 
-This step merges the pruned U-Net weights into the complete AudioLDM checkpoint while keeping other model components unchanged.
+The generated checkpoint contains only the diffusion U-Net weights.
 
+Merge these weights into the complete AudioLDM checkpoint while preserving all remaining model components.
 
-```
+```bash
 python merge_pruned_checkpoint.py \
     --pruned-ckpt checkpoints/pruned/l1_unet_pruned_p2_dp2.pt \
     --full-ckpt checkpoints/original/audioldm-m-full.ckpt \
     --output checkpoints/l1_audioldm-m-full_p2_dp2.ckpt
 ```
-| Argument        | Description                                                    |
-| --------------- | -------------------------------------------------------------- |
-| `--pruned-ckpt` | Path to pruned U-Net weights (`.pt`)                           |
-| `--full-ckpt`   | Original AudioLDM checkpoint (`.ckpt`)                         |
-| `--output`      | Output merged AudioLDM checkpoint                              |
-| `--prefix`      | U-Net parameter key prefix (default: `model.diffusion_model.`) |
 
+### Arguments
 
+| Argument | Description |
+|----------|-------------|
+| `--pruned-ckpt` | Path to the pruned U-Net checkpoint |
+| `--full-ckpt` | Original AudioLDM checkpoint |
+| `--output` | Output merged checkpoint |
+| `--prefix` | Parameter prefix (default: `model.diffusion_model.`) |
 
-### 4. Finetuning pruned AudioLDM-M-Full
+---
 
-Finetuning of the pruned model follows exactly same setup as shared in [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning). 
-It requires an update in the confoguration file: "audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml":
-     
-        channel_mult [1,2,3,5]--> [1,2,dp,p] and useage of the pruned model checkpoint with [1,2,dp,p] configuration.
-        
- 
-  
-```  
-python3 audioldm_train/train/latent_diffusion.py -c audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml --reload_from_ckpt data/checkpoints/{pruned model checkpoint}.ckpt
+# 4. Finetuning the Pruned AudioLDM-M-Full
 
+Finetuning follows exactly the same training pipeline as the official AudioLDM repository.
+
+Before training, update
+
+```text
+audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml
 ```
 
-Please follow [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning) for evaluation of the model output.
+Replace
 
-
-### 5. Semantic Quality Analysis
-
-This section will be updated soon. To listen generated audios, please visit [project page](https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/).
-
-
-## Cite this work
-
-if you find this work interesting and useful, please cite it as:
-
-```
-To be updated soon.
+```yaml
+channel_mult: [1,2,3,5]
 ```
 
-### Acknowledgment
-We greatly appreciate the open-soucre code base of the Haohe Liu's [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning). 
+with
 
-This work was supported by the Engineering and Physical Sciences Research Council (EPSRC)  [grant number EP/Y028805/1].  For the purpose of open access, the authors have applied a Creative Commons Attribution (CC BY) licence to any Author Accepted Manuscript version arising
+```yaml
+channel_mult: [1,2,dp,p]
+```
 
+where `dp` and `p` correspond to the pruning configuration.
 
+Then launch finetuning:
+
+```bash
+python3 audioldm_train/train/latent_diffusion.py \
+    -c audioldm_train/config/2023_08_23_reproduce_audioldm/audioldm_original_medium.yaml \
+    --reload_from_ckpt checkpoints/l1_audioldm-m-full_p2_dp2.ckpt
+```
+
+Please follow the official AudioLDM repository for evaluation of the generated audio.
+
+---
+
+# 5. Semantic Quality Analysis
+
+We evaluate semantic preservation using a pretrained **PANNs** classifier.
+
+For every generated audio clip, we obtain the **Top-10 predicted sound events** and analyse:
+
+- Capture rate after pruning
+- Missed sound events
+- Recovery after finetuning
+- Category-wise semantic preservation
+
+Audio samples, spectrogram comparisons, and qualitative results are available on the project website.
+
+🌐 **Project Page**
+
+https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/
+
+---
+
+## Citation
+
+If you find this repository useful in your research, please consider citing:
+
+```bibtex
+To be updated after publication.
+```
+
+---
+
+## Acknowledgment
+
+This repository builds upon the excellent open-source implementation of **AudioLDM** by Haohe Liu and collaborators.
+
+We sincerely thank the authors for making their training and inference framework publicly available.
+
+This work was supported by the **Engineering and Physical Sciences Research Council (EPSRC)** under Grant **EP/Y028805/1**.
+
+For the purpose of Open Access, the authors have applied a Creative Commons Attribution (CC BY) licence to any Author Accepted Manuscript arising from this submission.
