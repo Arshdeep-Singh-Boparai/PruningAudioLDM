@@ -41,7 +41,7 @@ Please use  this to setup environment, finetuning code. Thanks to Haohe Liu for 
 
 
 ### Download checkpoints 
- Please dowloand the pre-trained AudioLDM-M-Full and U-Net model checkpoints from [zenodo link](https://github.com/haoheliu/AudioLDM-training-finetuning).
+ Please dowloand the pre-trained AudioLDM-M-Full and U-Net model checkpoints from [zenodo link to be updated soon]().
 
 ### 1. Generate Layer-wise Sorted Channel Indexes
 This step computes channel importance rankings for convolutional layers in the pretrained U-Net.
@@ -125,3 +125,10 @@ python3 audioldm_train/train/latent_diffusion.py -c audioldm_train/config/2023_0
 ```
 
 Please follow [AudioLDM Training & Fine-tuning Repository](https://github.com/haoheliu/AudioLDM-training-finetuning) for evaluation of the model output.
+
+
+### 5. Semantic Quality Analysis
+
+This section will be updated soon. To listen generated audios, please visit [project page](https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/).
+
+
