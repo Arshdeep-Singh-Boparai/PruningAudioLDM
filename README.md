@@ -218,7 +218,7 @@ https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/
 If you find this repository useful in your research, please consider citing:
 
 ```bibtex
-To be updated after publication.
+soon will be uploaded on arXiv.
 ```
 
 ---
