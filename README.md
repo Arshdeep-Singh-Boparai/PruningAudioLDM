@@ -3,7 +3,7 @@
 > **Official implementation** of our pruning framework for compressing the **AudioLDM-M-Full** text-to-audio (TTA) generative model.
 
 [![Project Page](https://img.shields.io/badge/🌐-Project_Page-blue)](https://arshdeep-singh-boparai.github.io/EfficientAudioLDM/)
-[![arXiv](https://img.shields.io/badge/arXiv-coming--soon-b31b1b.svg)](http://arxiv.org/abs/2607.13330)
+[![arXiv](https://img.shields.io/badge/arXiv-b31b1b.svg)](http://arxiv.org/abs/2607.13330)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
