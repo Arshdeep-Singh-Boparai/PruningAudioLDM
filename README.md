@@ -79,7 +79,7 @@ Please download the pretrained checkpoints before running the pruning pipeline.
 
 | Checkpoint | Status |
 |------------|--------|
-| AudioLDM-M-Full, Pretrained U-Net, Pruned Models | [Zenodo link](https://doi.org/10.5281/zenodo.21376822) |
+| AudioLDM-M-Full, Pretrained U-Net, Pruned and finetuned Models | [Zenodo link](https://zenodo.org/records/21977996) |
 
 ---
 
